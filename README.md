@@ -14,8 +14,18 @@ Install Dependencies by running npm install.
 
 ## .env Files
 
-To access the correct databases locally, create the 2 env files
+To access the correct databases locally, create the 2 env files withion the root directory. The files to add are:
 
-`.env.development` and `.env.test`.
+### .env.development
 
-Save them within the root directory.
+Inside `.env.development` st the database to `PGDATABASE = nc_news`
+
+### .env.test
+
+Inside `.env.development` st the database to `PGDATABASE = nc_news_test`
+
+An example has been created called .env-example.
+
+## Setting up Database
+
+Before running locally, you will need to run the command `setup-dbs`. This will by default run in the development environment.

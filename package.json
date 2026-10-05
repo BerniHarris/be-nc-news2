@@ -7,5 +7,9 @@
     "nodemon": "^3.1.14",
     "pg": "^8.23.1",
     "supertest": "^7.3.0"
+  },
+  "scripts": {
+    "setup-dbs": "psql -f db/setup.sql",
+    "test": "NODE_ENV=test jest"
   }
 }
