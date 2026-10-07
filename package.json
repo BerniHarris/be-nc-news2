@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^18.0.5",
@@ -10,6 +11,7 @@
   },
   "scripts": {
     "setup-dbs": "psql -f db/setup.sql",
-    "test": "NODE_ENV=test jest"
+    "test": "NODE_ENV=test jest",
+    "seed": "node ./db/seeds/run-seed.js"
   }
 }
