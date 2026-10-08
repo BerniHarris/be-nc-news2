@@ -8,8 +8,6 @@ const __dirname = path.dirname(__filename);
 
 const ENV = process.env.NODE_ENV || "development";
 
-console.log(`Running on environment: ${ENV}`);
-
 dotenv.config({
   path: path.join(__dirname, `../.env.${ENV}`),
 });
