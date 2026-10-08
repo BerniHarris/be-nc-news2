@@ -28,4 +28,6 @@ An example has been created called .env-example.
 
 ## Setting up Database
 
-Before running locally, you will need to run the command `setup-dbs`. This will by default run in the development environment.
+Before running locally, you will need to run the command `npm run setup-dbs`. This will reset any existing databases and by default run in the development environment.
+
+Once they have been reset, run the command `npm run seed` in order to reset and populate your tables.
