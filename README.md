@@ -35,3 +35,9 @@ Once they have been reset, run the command `npm run seed` in order to reset and 
 ## Testing
 
 Jest and Supertest are used for testing. In order to run tests, use the command `npm test`. This will run by default using the test environment.
+
+## Endpoints
+
+Details can be seen in `endpoints.json`, however as a brief overview, the endpoints included are:
+
+- **GET /api** - Serves up a json representation of all the available endpoints of the api
