@@ -31,3 +31,7 @@ An example has been created called .env-example.
 Before running locally, you will need to run the command `npm run setup-dbs`. This will reset any existing databases and by default run in the development environment.
 
 Once they have been reset, run the command `npm run seed` in order to reset and populate your tables.
+
+## Testing
+
+Jest and Supertest are used for testing. In order to run tests, use the command `npm test`. This will run by default using the test environment.
