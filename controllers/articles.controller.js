@@ -3,7 +3,6 @@ import { queryArticleValidation } from "../helpers/validation/articles.validatio
 
 export const getArticles = async (req, res, next) => {
   const { sort_by = "created_at", order = "desc", topic } = req.query;
-
   const validationError = queryArticleValidation(sort_by, order, topic);
   if (validationError) return next(validationError);
 

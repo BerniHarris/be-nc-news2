@@ -13,15 +13,15 @@ const validOrders = ["asc", "desc"];
 
 export const queryArticleValidation = (sort_by, order, topic) => {
   if (!validSorts.includes(sort_by)) {
-    return next({ status: 400, msg: "Invalid sort_by" });
+    return { status: 400, message: "Invalid sort_by" };
   }
 
   if (!validOrders.includes(order)) {
-    return next({ status: 400, msg: "Invalid order" });
+    return { status: 400, message: "Invalid order" };
   }
 
   if (topic && typeof topic !== "string") {
-    return next({ status: 400, msg: "Invalid topic" });
+    return { status: 404, message: "Invalid topic" };
   }
 
   return null;
