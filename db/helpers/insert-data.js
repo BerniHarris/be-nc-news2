@@ -1,4 +1,4 @@
-import { formatDate, createRef, formatComments } from "./utils.js";
+import { formatDate, createRef, formatComments } from "../../utils/utils.js";
 import format from "pg-format";
 
 export const insertAllData = async (db, data) => {

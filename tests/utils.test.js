@@ -1,4 +1,4 @@
-import { formatDate, createRef, formatComments } from "../db/helpers/utils.js";
+import { formatDate, createRef, formatComments } from "../utils/utils.js";
 
 describe("formatDate", () => {
   test("returns a new object", () => {

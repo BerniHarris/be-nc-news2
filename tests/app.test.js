@@ -75,3 +75,81 @@ describe("GET /api/topics", () => {
       });
   });
 });
+
+describe("GET /api/articles", () => {
+  test("200: Responds with an articles array", async () => {
+    const { body } = await request(app).get("/api/articles").expect(200);
+    const articles = body.articles;
+    expect(articles).toBeDefined();
+    expect(articles).toEqual(expect.any(Array));
+  });
+  test("Returns the correct number of articles", async () => {
+    const { body } = await request(app).get("/api/articles").expect(200);
+    expect(body.articles).toHaveLength(13);
+  });
+  test("Each article includes: author, title, article_id, topic, created_at, votes, article_img_url, comment_count", async () => {
+    const { body } = await request(app).get("/api/articles").expect(200);
+    expect(body.articles).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          author: expect.any(String),
+          title: expect.any(String),
+          topic: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_id: expect.any(Number),
+          article_img_url: expect.any(String),
+          comment_count: expect.any(Number),
+        }),
+      ]),
+    );
+  });
+  test("Returned articles exclude article body", async () => {
+    const { body } = await request(app).get("/api/articles").expect(200);
+    expect(body.articles[0].body).not.toBeDefined();
+    expect(body.articles).toEqual(
+      expect.arrayContaining([
+        expect.not.objectContaining({
+          body: expect.any(String),
+        }),
+      ]),
+    );
+  });
+  test("Returned articles are sorted in DESC order of the articles created_at date field by default ", async () => {
+    const { body } = await request(app).get("/api/articles").expect(200);
+    expect(body.articles).toBeSortedBy("created_at", { descending: true });
+  });
+});
+// separate tests
+describe("Sort articles by", () => {
+  test.each([
+    ["author", "asc"],
+    ["title", "asc"],
+    ["topic", "asc"],
+    ["created_at", "asc"],
+    ["votes", "asc"],
+    ["article_id", "asc"],
+    ["article_img_url", "asc"],
+    ["comment_count", "asc"],
+    ["author", "desc"],
+    ["title", "desc"],
+    ["topic", "desc"],
+    ["created_at", "desc"],
+    ["votes", "desc"],
+    ["article_id", "desc"],
+    ["article_img_url", "desc"],
+    ["comment_count", "desc"],
+  ])(
+    "Correctly sorts articles by %s in %s order when requested",
+    async (sort_by, order) => {
+      const { body } = await request(app)
+        .get(`/api/articles?sort_by=${sort_by}&&order=${order}`)
+        .expect(200);
+
+      const isOrderDesc = order === "desc";
+      expect(body.articles).toBeSortedBy(sort_by, {
+        descending: isOrderDesc,
+      });
+    },
+  );
+});
