@@ -40,6 +40,8 @@ You are then able to run locally by using the command `node server.js` and visit
 
 Jest and Supertest are used for testing. In order to run tests, use the command `npm test`. This will run by default using the test environment.
 
+To view test coverage, use the command `npm test -- --coverage`.
+
 ## Endpoints
 
 Details can be seen in `endpoints.json`, however as a brief overview, the endpoints included are:
