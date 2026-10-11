@@ -1,8 +1,12 @@
 import express from "express";
-import { getArticles } from "../controllers/articles.controller.js";
+import {
+  getArticleById,
+  getArticles,
+} from "../controllers/articles.controller.js";
 
 const articlesRouter = express.Router();
 
 articlesRouter.get("/", getArticles);
+articlesRouter.get("/:article_id", getArticleById);
 
 export default articlesRouter;

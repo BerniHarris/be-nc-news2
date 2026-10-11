@@ -9,7 +9,7 @@ export const fetchArticles = async (sort_by, order, topic) => {
   const sortBy =
     sort_by === "comment_count" ? "comment_count" : `articles.${sort_by}`;
 
-  const result = await db.query(`
+  const { rows } = await db.query(`
     SELECT ${articleColumns}
        COUNT(comments.comment_id)::INT AS comment_count
     FROM articles 
@@ -19,5 +19,24 @@ export const fetchArticles = async (sort_by, order, topic) => {
     ORDER BY ${sortBy} ${order};
   `);
 
-  return result.rows;
+  return rows;
+};
+
+export const fetchArticleById = async (article_id) => {
+  const { rows } = await db.query(
+    `SELECT articles.*,
+       COUNT(comments.comment_id)::INT AS comment_count
+    FROM articles
+    LEFT JOIN comments ON articles.article_id = comments.article_id
+    WHERE articles.article_id = $1
+    GROUP BY articles.article_id;
+ `,
+    [article_id],
+  );
+
+  if (!rows[0]) {
+    return Promise.reject({ status: 404, message: "Article not found" });
+  }
+
+  return rows[0];
 };
