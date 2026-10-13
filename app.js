@@ -3,6 +3,12 @@ import cors from "cors";
 import apiRouter from "./routes/api-router.js";
 import topicsRouter from "./routes/topics-router.js";
 import articlesRouter from "./routes/articles-router.js";
+import {
+  customError,
+  error404,
+  error500,
+  psqlError,
+} from "./helpers/errors/errorHandler.js";
 
 const app = express();
 
@@ -13,16 +19,10 @@ app.use("/api", apiRouter);
 app.use("/api/topics", topicsRouter);
 app.use("/api/articles", articlesRouter);
 
-app.use((err, req, res, next) => {
-  if (err.status && err.message) {
-    return res.status(err.status).send({ message: err.message });
-  }
+app.all("/*invalid", error404);
 
-  if (err.code === "22P02") {
-    return res.status(400).send({ message: "Invalid id" });
-  }
-
-  return res.status(500).send({ message: "Internal Server Error" });
-});
+app.use(psqlError);
+app.use(customError);
+app.use(error500);
 
 export default app;

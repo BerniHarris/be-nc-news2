@@ -1,4 +1,5 @@
 import { formatDate, createRef, formatComments } from "../utils/utils.js";
+import { jest } from "@jest/globals";
 
 describe("formatDate", () => {
   test("returns a new object", () => {
@@ -12,8 +13,7 @@ describe("formatDate", () => {
     const timestamp = 1557572706232;
     const input = { created_at: timestamp };
     const result = formatDate(input);
-    expect(result.created_at).toBeInstanceOf(Date);
-    expect(result.created_at).toEqual(new Date(timestamp));
+    expect(result.created_at).toEqual("2019-05-11T11:05:06.232Z");
   });
   test("does not mutate the input", () => {
     const timestamp = 1557572706232;

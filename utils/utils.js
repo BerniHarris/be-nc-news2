@@ -1,6 +1,6 @@
 export const formatDate = ({ created_at, ...otherProperties }) => {
   if (!created_at) return { ...otherProperties };
-  return { created_at: new Date(created_at), ...otherProperties };
+  return { created_at: new Date(created_at).toISOString(), ...otherProperties };
 };
 
 export const createRef = (arr, key, value) => {
