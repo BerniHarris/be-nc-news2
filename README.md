@@ -50,3 +50,4 @@ Details can be seen in `endpoints.json`, however as a brief overview, the endpoi
 - **GET /api/topics** - Serves an array of all topics
 - **GET /api/articles** - Serves an array of all articles
 - **GET /api/articles/:article_id** - Responds with a complete article object including comments count
+- **GET /api/Users**: Serves an array of all users

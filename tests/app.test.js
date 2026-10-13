@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import request from "supertest";
 import app from "../app.js";
 import db from "../db/connection.js";
@@ -204,6 +205,60 @@ describe("be nc news2", () => {
         .get("/api/articles/wrong")
         .expect(400);
       expect(body.message).toBe("Invalid article id");
+    });
+  });
+
+  describe("GET /api/users", () => {
+    test("200: Responds with a users array", async () => {
+      const { body } = await request(app).get("/api/users").expect(200);
+      const users = body.users;
+      expect(users).toBeDefined();
+      expect(users).toEqual(expect.any(Array));
+    });
+    test("Returns the correct number of users", async () => {
+      const { body } = await request(app).get("/api/users").expect(200);
+      expect(body.users).toHaveLength(4);
+    });
+    test("Each user returned includes the correct keys", async () => {
+      const { body } = await request(app).get("/api/users").expect(200);
+      expect(body.users).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String),
+          }),
+        ]),
+      );
+    });
+    test("Returns the correct data", async () => {
+      const { body } = await request(app).get("/api/users").expect(200);
+      expect(body.users).toEqual([
+        {
+          username: "butter_bridge",
+          name: "jonny",
+          avatar_url:
+            "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+        },
+        {
+          username: "icellusedkars",
+          name: "sam",
+          avatar_url:
+            "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+        },
+        {
+          username: "rogersop",
+          name: "paul",
+          avatar_url:
+            "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4",
+        },
+        {
+          username: "lurker",
+          name: "do_nothing",
+          avatar_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+        },
+      ]);
     });
   });
 });

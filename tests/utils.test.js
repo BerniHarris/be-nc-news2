@@ -1,5 +1,4 @@
 import { formatDate, createRef, formatComments } from "../utils/utils.js";
-import { jest } from "@jest/globals";
 
 describe("formatDate", () => {
   test("returns a new object", () => {
