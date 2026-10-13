@@ -8,3 +8,7 @@ node_modules/
 # Logs
 *.log
 npm-debug.log*
+
+# Local coverage reports
+coverage/
+.nyc_output/
