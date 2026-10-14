@@ -1,7 +1,7 @@
 import db from "../../db/connection.js";
 import seed from "../../db/seeds/seed.js";
 import testData from "../../db/data/test-data";
-import { fetchArticleById } from "../../models/articles.model.js";
+import { fetchArticleById } from "../../models/articles.models.js";
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());

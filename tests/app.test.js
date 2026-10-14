@@ -1,4 +1,4 @@
-import { jest } from "@jest/globals";
+import { expect, jest } from "@jest/globals";
 import request from "supertest";
 import app from "../app.js";
 import db from "../db/connection.js";
@@ -159,22 +159,6 @@ describe("be nc news2", () => {
         }),
       );
     });
-    test("200: Article object includes the correct keys", async () => {
-      const { body } = await request(app).get("/api/articles/12").expect(200);
-      expect(body.article).toEqual(
-        expect.objectContaining({
-          author: expect.any(String),
-          title: expect.any(String),
-          topic: expect.any(String),
-          body: expect.any(String),
-          created_at: expect.any(String),
-          votes: expect.any(Number),
-          article_id: expect.any(Number),
-          article_img_url: expect.any(String),
-          comment_count: expect.any(Number),
-        }),
-      );
-    });
     test("200: Returns the correct article object", async () => {
       const article12 = {
         author: "butter_bridge",
@@ -259,6 +243,64 @@ describe("be nc news2", () => {
             "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
         },
       ]);
+    });
+  });
+
+  describe("GET /api/articles/:article_id/comments", () => {
+    const article5Comments = [
+      {
+        body: "What do you see? I have no idea where this will lead us. This place I speak of, is known as the Black Lodge.",
+        votes: 16,
+        author: "icellusedkars",
+        article_id: 5,
+        created_at: "2020-06-09T05:00:00.000Z",
+        comment_id: 14,
+      },
+      {
+        body: "I am 100% sure that we're not completely sure.",
+        votes: 1,
+        author: "butter_bridge",
+        article_id: 5,
+        created_at: "2020-11-24T00:08:00.000Z",
+        comment_id: 15,
+      },
+    ];
+
+    test("200: responds with an array of comment objects", async () => {
+      const { body } = await request(app)
+        .get("/api/articles/5/comments")
+        .expect(200);
+      expect(body.comments).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            body: expect.any(String),
+            votes: expect.any(Number),
+            author: expect.any(String),
+            article_id: 5,
+            created_at: expect.any(String),
+          }),
+        ]),
+      );
+    });
+    test("200: responds with correct array of comment objects when given a valid article_id", async () => {
+      const { body } = await request(app)
+        .get("/api/articles/5/comments")
+        .expect(200);
+      expect(body.comments).toEqual(article5Comments);
+      expect(body.comments.length).toBe(2);
+    });
+    test("400: responds with the correct error message when passed an invalid article_id", async () => {
+      const response = await request(app)
+        .get("/api/articles/wrongwrongwrong/comments")
+        .expect(400);
+      expect(response.body.message).toBe("Invalid article id");
+    });
+
+    test("404: responds with the correct error message when passed a valid but non-existent article_id", async () => {
+      const response = await request(app)
+        .get("/api/articles/9999/comments")
+        .expect(404);
+      expect(response.body.message).toBe("Article not found");
     });
   });
 });

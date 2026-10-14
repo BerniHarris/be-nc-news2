@@ -1,4 +1,5 @@
-import { fetchArticles, fetchArticleById } from "../models/articles.model.js";
+import { fetchArticles, fetchArticleById } from "../models/articles.models.js";
+import { fetchCommentsByArticleId } from "../models/comments.models.js";
 import { queryArticleValidation } from "../helpers/validation/articles.validation.js";
 import { validateId } from "../helpers/validation/validation.js";
 
@@ -23,6 +24,19 @@ export const getArticleById = async (req, res, next) => {
   try {
     const article = await fetchArticleById(articleId);
     res.status(200).send({ article });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getCommentsByArticleId = async (req, res, next) => {
+  const { article_id: articleId } = req.params;
+  const idError = validateId(articleId, "article id");
+  if (idError) return next(idError);
+
+  try {
+    const comments = await fetchCommentsByArticleId(articleId);
+    res.status(200).send({ comments });
   } catch (err) {
     next(err);
   }
