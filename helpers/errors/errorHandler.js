@@ -2,9 +2,15 @@ export const psqlError = (err, req, res, next) => {
   if (err.code === "22P02") {
     return res.status(400).send({ message: "Invalid input." });
   }
-  if (err.code === "23503") {
-    return res.status(404).send({ message: "Input not found." });
+
+  if (err.code === "23503" && err.detail.includes("author")) {
+    return res.status(404).send({ message: "Username not found." });
   }
+
+  if (err.code === "23503" && err.detail.includes("article_id")) {
+    return res.status(404).send({ message: "Article not found." });
+  }
+
   next(err);
 };
 

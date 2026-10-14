@@ -76,5 +76,24 @@
         "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
       }
     }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "post a new comment on specified article",
+    "exampleRequest": {
+      "body": "String",
+      "username": "String"
+    },
+    "exampleResponse": {
+      "comment": [
+        {
+          "comment_id": "Number",
+          "body": "String",
+          "article_id": "Number",
+          "author": "String",
+          "votes": "Number",
+          "created_at": "String"
+        }
+      ]
+    }
   }
 }

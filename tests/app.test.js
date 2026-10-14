@@ -303,4 +303,65 @@ describe("be nc news2", () => {
       expect(response.body.message).toBe("Article not found");
     });
   });
+
+  describe("POST /api/articles/:article_id/comments", () => {
+    test("status 201: returns a posted comment", async () => {
+      const userComment = {
+        username: "butter_bridge",
+        body: "Hello! Hope you're having a good day",
+      };
+      const res = await request(app)
+        .post("/api/articles/1/comments")
+        .send(userComment)
+        .expect(201);
+      expect(res.body.comment).toEqual(
+        expect.objectContaining({
+          comment_id: expect.any(Number),
+          article_id: 1,
+          author: "butter_bridge",
+          body: "Hello! Hope you're having a good day",
+          votes: 0,
+          created_at: expect.any(String),
+        }),
+      );
+    });
+    // test("200: creates and responds with the newly created comment", async () => {
+    //   const newComment = { username: "sam", body: "this is a new comment" };
+    //   const { body } = await request(app)
+    //     .post("/api/articles/1/comments")
+    //     .send(newComment)
+    //     .expect(201);
+    //   expect(body.comments).toEqual(
+    //     expect.arrayContaining([
+    //       expect.objectContaining({
+    //         body: expect.any(String),
+    //         votes: expect.any(Number),
+    //         author: expect.any(String),
+    //         article_id: 5,
+    //         created_at: expect.any(String),
+    //       }),
+    //     ]),
+    //   );
+    // });
+    // test("200: responds with correct array of comment objects when given a valid article_id", async () => {
+    //   const { body } = await request(app)
+    //     .get("/api/articles/5/comments")
+    //     .expect(200);
+    //   expect(body.comments).toEqual(article5Comments);
+    //   expect(body.comments.length).toBe(2);
+    // });
+    // test("400: responds with the correct error message when passed an invalid article_id", async () => {
+    //   const response = await request(app)
+    //     .get("/api/articles/wrongwrongwrong/comments")
+    //     .expect(400);
+    //   expect(response.body.message).toBe("Invalid article id");
+    // });
+
+    // test("404: responds with the correct error message when passed a valid but non-existent article_id", async () => {
+    //   const response = await request(app)
+    //     .get("/api/articles/9999/comments")
+    //     .expect(404);
+    //   expect(response.body.message).toBe("Article not found");
+    // });
+  });
 });

@@ -14,3 +14,13 @@ export const fetchCommentsByArticleId = async (article_id) => {
 
   return rows;
 };
+
+export const addCommentToArticle = async (articleId, author, body) => {
+  const { rows } = await db.query(
+    `INSERT INTO comments (article_id, author, body)
+     VALUES ($1, $2, $3)
+     RETURNING *;`,
+    [articleId, author, body],
+  );
+  return rows[0];
+};

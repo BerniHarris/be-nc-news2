@@ -47,8 +47,11 @@ To view test coverage, use the command `npm test -- --coverage`.
 Details can be seen in `endpoints.json`, however as a brief overview, the endpoints included are:
 
 - **GET /api** - Serves up a json representation of all the available endpoints of the api
+
 - **GET /api/topics** - Serves an array of all topics
 - **GET /api/articles** - Serves an array of all articles
 - **GET /api/articles/:article_id** - Responds with a complete article object including comments count
-- **GET /api/Users**- Serves an array of all users
 - **GET /api/articles/:article_id/comments** -Responds with an array of comment objects linked to a specified article_id
+- **POST /api/articles/:article_id/comments** - Create a comment for a specific article_id and return the created comment object
+
+- **GET /api/Users**- Serves an array of all users

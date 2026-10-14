@@ -1,10 +1,13 @@
 import db from "../../db/connection.js";
 import seed from "../../db/seeds/seed.js";
 import testData from "../../db/data/test-data";
-import { fetchCommentsByArticleId } from "../../models/comments.models.js";
+import {
+  fetchCommentsByArticleId,
+  addCommentToArticle,
+} from "../../models/comments.models.js";
 
 beforeEach(() => seed(testData));
-afterAll(() => db.end());
+afterAll(async () => db.end());
 
 describe("fetchCommentsByArticleId model", () => {
   test("returns correct comments for the article id", async () => {
@@ -23,5 +26,27 @@ describe("fetchCommentsByArticleId model", () => {
       expect(err.status).toBe(404);
       expect(err.message).toBe("Article not found");
     }
+  });
+});
+
+describe("addCommentToArticle Model", () => {
+  beforeEach(async () => {
+    await db.query("DELETE FROM comments;");
+  });
+
+  test("should successfully insert a new comment and return the inserted row", async () => {
+    const testArticleId = 1;
+    const testAuthor = "butter_bridge";
+    const testBody = "This is a fantastic article!";
+
+    const result = await addCommentToArticle(
+      testArticleId,
+      testAuthor,
+      testBody,
+    );
+    expect(result).toBeDefined();
+    expect(result.body).toBe(testBody);
+    expect(result.author).toBe(testAuthor);
+    expect(result.article_id).toBe(1);
   });
 });

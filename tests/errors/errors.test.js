@@ -31,13 +31,29 @@ describe("Error Handling Middleware", () => {
       expect(res.send).toHaveBeenCalledWith({ message: "Invalid input." });
       expect(next).not.toHaveBeenCalled();
     });
-    test("handles 23503", () => {
-      const err = { code: "23503" };
+    test("handles 23503 for invalid usernames", () => {
+      const err = {
+        code: "23503",
+        detail: 'Key (author)=(not_a_user) is not present in table "users".',
+      };
 
       psqlError(err, req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.send).toHaveBeenCalledWith({ message: "Input not found." });
+      expect(res.send).toHaveBeenCalledWith({ message: "Username not found." });
+      expect(next).not.toHaveBeenCalled();
+    });
+    test("handles 23503 for invalid articles", () => {
+      const err = {
+        code: "23503",
+        detail:
+          'Key (article_id)=(not_an_article) is not present in table "articles".',
+      };
+
+      psqlError(err, req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.send).toHaveBeenCalledWith({ message: "Article not found." });
       expect(next).not.toHaveBeenCalled();
     });
   });

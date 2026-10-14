@@ -1,4 +1,4 @@
-import { afterEach, jest } from "@jest/globals";
+import { jest } from "@jest/globals";
 
 jest.unstable_mockModule("../../models/articles.models.js", () => {
   return {
