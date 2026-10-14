@@ -53,5 +53,5 @@ Details can be seen in `endpoints.json`, however as a brief overview, the endpoi
 - **GET /api/articles/:article_id** - Responds with a complete article object including comments count
 - **GET /api/articles/:article_id/comments** -Responds with an array of comment objects linked to a specified article_id
 - **POST /api/articles/:article_id/comments** - Create a comment for a specific article_id and return the created comment object
-
+- **PATCH /api/articles/:article_id** - Allows users to upvote or downvote an article and responds with the updated article object
 - **GET /api/Users**- Serves an array of all users
