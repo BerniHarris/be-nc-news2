@@ -1,4 +1,4 @@
-import { expect, jest } from "@jest/globals";
+import { expect, jest, test } from "@jest/globals";
 import request from "supertest";
 import app from "../app.js";
 import db from "../db/connection.js";
@@ -305,7 +305,7 @@ describe("be nc news2", () => {
   });
 
   describe("POST /api/articles/:article_id/comments", () => {
-    test("status 201: returns a posted comment", async () => {
+    test("status 201: returns correct article with updated votes", async () => {
       const userComment = {
         username: "butter_bridge",
         body: "Hello! Hope you're having a good day",
@@ -325,43 +325,103 @@ describe("be nc news2", () => {
         }),
       );
     });
-    // test("200: creates and responds with the newly created comment", async () => {
-    //   const newComment = { username: "sam", body: "this is a new comment" };
-    //   const { body } = await request(app)
-    //     .post("/api/articles/1/comments")
-    //     .send(newComment)
-    //     .expect(201);
-    //   expect(body.comments).toEqual(
-    //     expect.arrayContaining([
-    //       expect.objectContaining({
-    //         body: expect.any(String),
-    //         votes: expect.any(Number),
-    //         author: expect.any(String),
-    //         article_id: 5,
-    //         created_at: expect.any(String),
-    //       }),
-    //     ]),
-    //   );
-    // });
-    // test("200: responds with correct array of comment objects when given a valid article_id", async () => {
-    //   const { body } = await request(app)
-    //     .get("/api/articles/5/comments")
-    //     .expect(200);
-    //   expect(body.comments).toEqual(article5Comments);
-    //   expect(body.comments.length).toBe(2);
-    // });
-    // test("400: responds with the correct error message when passed an invalid article_id", async () => {
-    //   const response = await request(app)
-    //     .get("/api/articles/wrongwrongwrong/comments")
-    //     .expect(400);
-    //   expect(response.body.message).toBe("Invalid article id");
-    // });
+    test("200: responds with correct array of comment objects when given a valid article_id", async () => {
+      const userComment = {
+        username: "butter_bridge",
+        body: "Hello! Hope you're having a good day",
+      };
+      const { body } = await request(app)
+        .get("/api/articles/5/comments")
+        .send(userComment)
+        .expect(200);
+      expect(body.comments).toEqual([
+        {
+          comment_id: 14,
+          body: "What do you see? I have no idea where this will lead us. This place I speak of, is known as the Black Lodge.",
+          article_id: 5,
+          author: "icellusedkars",
+          votes: 16,
+          created_at: "2020-06-09T05:00:00.000Z",
+        },
+        {
+          comment_id: 15,
+          body: "I am 100% sure that we're not completely sure.",
+          article_id: 5,
+          author: "butter_bridge",
+          votes: 1,
+          created_at: "2020-11-24T00:08:00.000Z",
+        },
+      ]);
+      expect(body.comments.length).toBe(2);
+    });
+    test("400: responds with the correct error message when passed an invalid article_id", async () => {
+      const response = await request(app)
+        .post("/api/articles/wrongwrongwrong/comments")
+        .expect(400)
+        .send({
+          username: "butter_bridge",
+          body: "Hello! Hope you're having a good day",
+        });
+      expect(response.body.message).toBe("Invalid input.");
+    });
+    test("404: responds with the correct error message when passed a valid but non-existent article_id", async () => {
+      const userComment = {
+        username: "butter_bridge",
+        body: "Hello! Hope you're having a good day",
+      };
+      const response = await request(app)
+        .post("/api/articles/11111/comments")
+        .send(userComment)
 
-    // test("404: responds with the correct error message when passed a valid but non-existent article_id", async () => {
-    //   const response = await request(app)
-    //     .get("/api/articles/9999/comments")
-    //     .expect(404);
-    //   expect(response.body.message).toBe("Article not found");
-    // });
+        .expect(404);
+      expect(response.body.message).toBe("Article not found.");
+    });
+  });
+
+  describe("PATCH /api/:article_id/", () => {
+    test("200: responds with the correct article object along with its updated votes ", async () => {
+      const articleBeforeUpdate = await request(app).get("/api/articles/1");
+
+      const votesBeforeUpdate = articleBeforeUpdate.body.article.votes;
+      const updatedArticle = await request(app)
+        .patch("/api/articles/1")
+        .send({ inc_votes: 1 })
+        .expect(200);
+
+      expect(updatedArticle.body.article).toEqual({
+        article_id: 1,
+        article_img_url:
+          "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        author: "butter_bridge",
+        body: "I find this existence challenging",
+        created_at: "2020-07-09T20:11:00.000Z",
+        title: "Living in the shadow of a great man",
+        topic: "mitch",
+        votes: 101,
+      });
+      const updatedVotes = updatedArticle.body.article.votes;
+      expect(updatedVotes).toBe(votesBeforeUpdate + 1);
+    });
+    test("400: responds with correct error when inc_votes is missing", async () => {
+      const response = await request(app)
+        .patch("/api/articles/1")
+        .send({})
+        .expect(400);
+      expect(response.body.message).toBe("inc_votes is required");
+    });
+    test("400: responds with correct error when passed inc_votes isn't a number", async () => {
+      const response = await request(app)
+        .patch("/api/articles/1")
+        .send({ inc_votes: "oops" })
+        .expect(400);
+      expect(response.body.message).toBe("Invalid inc_votes");
+    });
+    test("400: responds with correct error when article_id is invalid", async () => {
+      const response = await request(app)
+        .patch("/api/articles/oops")
+        .send({ inc_votes: 1 })
+        .expect(400);
+      expect(response.body.message).toBe("Invalid article id");
+    });
   });
 });

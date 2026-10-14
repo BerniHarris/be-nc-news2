@@ -1,6 +1,13 @@
-import { fetchArticles, fetchArticleById } from "../models/articles.models.js";
+import {
+  fetchArticles,
+  fetchArticleById,
+  updateArticleVotes,
+} from "../models/articles.models.js";
 import { fetchCommentsByArticleId } from "../models/comments.models.js";
-import { queryArticleValidation } from "../helpers/validation/articles.validation.js";
+import {
+  queryArticleValidation,
+  validateArticleVote,
+} from "../helpers/validation/articles.validation.js";
 import { validateId } from "../helpers/validation/validation.js";
 
 export const getArticles = async (req, res, next) => {
@@ -37,6 +44,20 @@ export const getCommentsByArticleId = async (req, res, next) => {
   try {
     const comments = await fetchCommentsByArticleId(articleId);
     res.status(200).send({ comments });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const patchArticle = async (req, res, next) => {
+  const { article_id: articleId } = req.params;
+  const { inc_votes: vote } = req.body;
+
+  const commentError = validateArticleVote(articleId, vote);
+  if (commentError) return next(commentError);
+  try {
+    const article = await updateArticleVotes(vote, articleId);
+    res.status(200).send({ article });
   } catch (err) {
     next(err);
   }

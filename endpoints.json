@@ -98,7 +98,7 @@
   },
 
   "PATCH /api/articles/:article_id": {
-    "description": "allows users to upvote or downvote votes on an article and responds with the updated article object",
+    "description": "allows users to upvote or downvote an article and responds with the updated article object",
     "exampleRequest": { "inc_votes": 1 },
     "exampleResponse": {
       "article": {

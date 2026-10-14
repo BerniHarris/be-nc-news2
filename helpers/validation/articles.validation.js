@@ -1,3 +1,4 @@
+import { validateId } from "../validation/validation.js";
 const validSorts = [
   "author",
   "title",
@@ -24,5 +25,18 @@ export const queryArticleValidation = (sort_by, order, topic) => {
     return { status: 404, message: "Invalid topic" };
   }
 
+  return null;
+};
+
+export const validateArticleVote = (articleId, vote) => {
+  const idError = validateId(articleId, "article id");
+  if (idError) return idError;
+  if (!vote) {
+    return { status: 400, message: "inc_votes is required" };
+  }
+
+  if (typeof vote !== "number") {
+    return { status: 400, message: "Invalid inc_votes" };
+  }
   return null;
 };

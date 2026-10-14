@@ -1,9 +1,11 @@
 import { jest } from "@jest/globals";
+import { updateArticleVotes } from "../../models/articles.models.js";
 
 jest.unstable_mockModule("../../models/articles.models.js", () => {
   return {
     fetchArticles: jest.fn(),
     fetchArticleById: jest.fn(),
+    updateArticleVotes: jest.fn(),
   };
 });
 
