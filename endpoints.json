@@ -114,6 +114,6 @@
     }
   },
   "DELETE /api/comments/:comment_id": {
-    "description": "allows users to upvote or downvote an article and responds with the updated article object"
+    "description": "Allows users to delete comments by a comment_id"
   }
 }
