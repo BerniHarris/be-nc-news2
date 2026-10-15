@@ -1,119 +1,333 @@
 {
-  "GET /api": {
-    "description": "serves up a json representation of all the available endpoints of the api"
-  },
-  "GET /api/topics": {
-    "description": "serves an array of all topics",
-    "queries": [],
-    "exampleResponse": {
-      "topics": [{ "slug": "football", "description": "Footie!" }]
-    }
-  },
-  "GET /api/articles": {
-    "description": "serves an array of all articles",
-    "queries": ["topic", "sort_by", "order"],
-    "exampleResponse": {
-      "articles": [
-        {
-          "author": "cooljmessy",
-          "title": "Express.js: A Server-Side JavaScript Framework",
-          "topic": "coding",
-          "created_at": "2020-10-05T22:23:00.000Z",
-          "votes": 0,
-          "article_id": 8,
-          "article_img_url": "https://images.pexels.com/photos/11035482/pexels-photo-11035482.jpeg?w=700&h=700",
-          "comment_count": 7
-        }
-      ]
-    }
-  },
-  "GET /api/articles/:article_id": {
-    "description": "Responds with a complete article object including comments count",
-    "exampleResponse": {
-      "article": {
-        "article_id": 1,
-        "title": "Example title",
-        "topic": "coding",
-        "author": "tickle122",
-        "body": "Full article text...",
-        "created_at": "2020-10-17T00:00:00.000Z",
-        "votes": 0,
-        "article_img_url": "https://example.com/image.png",
-        "comment_count": 5
-      }
-    }
-  },
-  "GET /api/articles/:article_id/comments": {
-    "description": "Responds with an array of comment objects linked to a specified article_id",
-    "exampleResponse": {
-      "comments": [
-        {
-          "comment_id": 1,
-          "body": "Great article!",
-          "article_id": 1,
-          "author": "tickle122",
-          "votes": 0,
-          "created_at": "2020-11-03T10:00:00.000Z"
-        },
-        {
-          "comment_id": 1,
-          "body": "Great article!",
-          "article_id": 1,
-          "author": "tickle122",
-          "votes": 0,
-          "created_at": "2020-11-03T10:00:00.000Z"
-        }
-      ]
-    }
-  },
-  "GET /api/Users": {
-    "description": "serves an array of all users",
-    "queries": [],
-    "exampleResponse": {
-      "users": {
-        "username": "butter_bridge",
-        "name": "jonny",
-        "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
-      }
-    }
-  },
-  "POST /api/articles/:article_id/comments": {
-    "description": "post a new comment on specified article",
-    "exampleRequest": {
-      "body": "String",
-      "username": "String"
-    },
-    "exampleResponse": {
-      "comment": [
-        {
-          "comment_id": "Number",
-          "body": "String",
-          "article_id": "Number",
-          "author": "String",
-          "votes": "Number",
-          "created_at": "String"
-        }
-      ]
-    }
-  },
+  "created by": "Berni Harris",
+  "title": "be-nc-news2",
+  "description": "Recreation of a RESTful, express/ supertest forum style API created whilst on my northcoders bootcamp.",
 
-  "PATCH /api/articles/:article_id": {
-    "description": "allows users to upvote or downvote an article and responds with the updated article object",
-    "exampleRequest": { "inc_votes": 1 },
-    "exampleResponse": {
-      "article": {
-        "author": "cooljmessy",
-        "title": "Express.js: A Server-Side JavaScript Framework",
-        "topic": "coding",
-        "created_at": "2020-10-05T22:23:00.000Z",
-        "votes": 0,
-        "article_id": 8,
-        "article_img_url": "https://images.pexels.com/photos/11035482/pexels-photo-11035482.jpeg?w=700&h=700",
-        "comment_count": 8
+  "schemas": {
+    "articles": {
+      "article_id": "Number",
+      "title": "String",
+      "topic": "String",
+      "author": "String",
+      "body": "String",
+      "created_at": "String",
+      "votes": "Number",
+      "article_img_url": "String",
+      "comment_count": "Number"
+    },
+    "comments": {
+      "comment_id": "Number",
+      "body": "String",
+      "article_id": "Number",
+      "author": "String",
+      "votes": "Number",
+      "created_at": "String"
+    },
+    "topics": {
+      "slug": "coding",
+      "description": "Code is love, code is life"
+    },
+    "users": {
+      "username": "String",
+      "name": "String",
+      "avatar_url": "String"
+    }
+  },
+  "endpoints": {
+    "Documentation endpoint": {
+      "GET /api": {
+        "description": "serves up a json including information and a representation of all the available endpoints of the api"
+      }
+    },
+    "Article endpoints": {
+      "GET /api/articles": {
+        "description": "Serves an array of all articles",
+        "queries": {
+          "topic": "Filters by topic slug",
+          "order": { "allowed": ["asc", "desc"], "default": "desc" },
+          "sort_by": [
+            "author",
+            "title",
+            "topic",
+            "created_at",
+            "votes",
+            "article_id",
+            "article_img_url",
+            "comment_count"
+          ]
+        },
+        "exampleRequests": {
+          "multiple_queries": "/api/articles?sort_by=votes&order=desc&topic=cats",
+          "sort_by_queries": "/api/articles?sort_by=votes",
+          "order": "/api/articles?order=asc",
+          "topic_queries": "/api/articles?topic=cats"
+        },
+        "exampleResponses": {
+          "200_with_articles": {
+            "articles": [
+              {
+                "author": "cooljmessy",
+                "title": "Express.js: A Server-Side JavaScript Framework",
+                "topic": "coding",
+                "created_at": "2020-10-05T22:23:00.000Z",
+                "votes": 0,
+                "article_id": 8,
+                "article_img_url": "https://images.pexels.com/photos/11035482/pexels-photo-11035482.jpeg?w=700&h=700",
+                "comment_count": 7
+              }
+            ]
+          },
+          "200_without_articles": { "articles": [] },
+          "400_invalid_sort_by": {
+            "status": 400,
+            "message": "Invalid sort_by"
+          },
+          "400_invalid_order": { "status": 400, "message": "Invalid order" }
+        }
+      },
+      "GET /api/articles/:article_id": {
+        "description": "Responds with a complete article object including comments count",
+        "params": { "article_id": "Numeric ID of the article" },
+        "exampleRequest": "api/articles/1",
+        "exampleResponses": {
+          "200_successful_get_article": {
+            "article": {
+              "article_id": 1,
+              "title": "Example title",
+              "topic": "coding",
+              "author": "tickle122",
+              "body": "Full article text...",
+              "created_at": "2020-10-17T00:00:00.000Z",
+              "votes": 0,
+              "article_img_url": "https://example.com/image.png",
+              "comment_count": 5
+            }
+          },
+          "errors": {
+            "400_invalid_article_id": {
+              "status": 400,
+              "message": "Invalid article id"
+            },
+            "404_topic_not_found": {
+              "status": 404,
+              "message": "Article not found"
+            }
+          }
+        }
+      },
+      "PATCH /api/articles/:article_id": {
+        "description": "Updates the vote count on an article",
+        "params": {
+          "article_id": "Numeric ID of the article to update"
+        },
+        "body": {
+          "inc_votes": {
+            "type": "number",
+            "required": true,
+            "description": "Amount to increment or decrement the article's votes"
+          }
+        },
+        "exampleRequest": {
+          "endpoint": "/api/articles/1",
+          "body": { "inc_votes": 5 }
+        },
+        "exampleResponses": {
+          "200_successful_vote_update": {
+            "article": {
+              "article_id": 1,
+              "title": "Example title",
+              "votes": 105,
+              "topic": "coding",
+              "author": "tickle122",
+              "body": "Full article text...",
+              "created_at": "2020-10-17T00:00:00.000Z",
+              "article_img_url": "https://example.com/image.png"
+            }
+          },
+          "400_inc_votes_required": {
+            "status": 400,
+            "message": "inc_votes is required"
+          },
+          "400_inc_votes_invalid": {
+            "status": 400,
+            "message": "Invalid inc_votes"
+          },
+          "400_invalid_article_id": {
+            "status": 400,
+            "message": "Invalid article id"
+          },
+          "404_article_not_found": {
+            "status": 404,
+            "message": "Article not found"
+          }
+        }
+      },
+      "GET /api/articles/:article_id/comments": {
+        "description": "Responds with an array of comment objects linked to a specified article_id",
+        "exampleRequest": "api/articles/1/comments",
+        "params": {
+          "article_id": "Numeric ID of the article"
+        },
+        "exampleResponses": {
+          "200_with_comments": {
+            "comments": [
+              {
+                "comment_id": 1,
+                "body": "Great article!",
+                "article_id": 1,
+                "author": "tickle122",
+                "votes": 0,
+                "created_at": "2020-11-03T10:00:00.000Z"
+              },
+              {
+                "comment_id": 2,
+                "body": "so good",
+                "article_id": 1,
+                "author": "grumpy19",
+                "votes": 9,
+                "created_at": "2020-08-03T10:00:00.000Z"
+              }
+            ]
+          },
+          "200_without_comments": { "comments": [] },
+          "400_invalid_article_id": {
+            "status": 400,
+            "message": "Invalid article id"
+          },
+          "404_article_not_found": {
+            "status": 404,
+            "message": "Article not found"
+          }
+        }
+      },
+      "POST /api/articles/:article_id/comments": {
+        "description": "Post a new comment on specified article",
+        "params": {
+          "article_id": "Numeric ID of the article"
+        },
+        "body": {
+          "username": {
+            "type": "string",
+            "required": true
+          },
+          "body": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "exampleRequest": {
+          "endpoint": "/api/articles/1/comments",
+          "body": { "username": "otisTheDog", "body": "I love sticks!" }
+        },
+        "exampleResponses": {
+          "200_successful_comment_post": {
+            "comment": {
+              "comment_id": 1,
+              "body": "I love sticks!",
+              "article_id": 1,
+              "author": "otisTheDog",
+              "votes": 0,
+              "created_at": "2020-11-03T10:00:00.000Z"
+            }
+          },
+          "400_invalid_article_id": {
+            "status": 400,
+            "message": "Invalid article id"
+          },
+          "400_missing_body_or_username": {
+            "status": 400,
+            "message": "Comment must include both a body and username"
+          },
+          "400_username_not_string": {
+            "status": 400,
+            "message": "Invalid username"
+          },
+          "400_body_not_string": {
+            "status": 400,
+            "message": "Invalid body"
+          },
+          "404_article_not_found": {
+            "status": 404,
+            "message": "Article not found"
+          }
+        }
+      }
+    },
+    "Comment endpoints": {
+      "DELETE /api/comments/:comment_id": {
+        "description": "Allows users to delete comments by a comment_id",
+        "params": {
+          "comment_id": "Numeric ID of the comment"
+        },
+        "exampleRequest": "/api/comments/1",
+        "exampleResponses": {
+          "204_successful_delete": { "status": "204", "body": "<empty>" },
+          "400_invalid_comment_id": {
+            "status": 400,
+            "message": "Invalid comment id"
+          },
+          "404_comment_not_found": {
+            "status": 404,
+            "message": "Comment not found"
+          }
+        }
+      }
+    },
+    "Topic endpoints": {
+      "GET /api/topics": {
+        "description": "Serves an array of all topics",
+        "exampleRequests": "/api/topics",
+        "exampleResponses": {
+          "successful": {
+            "200_with_topics": {
+              "topics": [{ "slug": "football", "description": "Footie!" }]
+            },
+            "200_without_topics": { "topics": [] }
+          }
+        }
+      }
+    },
+    "User endpoints": {
+      "GET /api/users": {
+        "description": "Serves an array of all users",
+        "exampleRequests": "/api/users",
+        "exampleResponses": {
+          "200_with_users": {
+            "users": [
+              {
+                "username": "happyamy2016",
+                "name": "Amy Happy",
+                "avatar_url": "https://vignette1.wikia.nocookie.net/mrmen/images/7/7f/Mr_Happy.jpg/revision/latest?cb=20140102171729"
+              },
+              {
+                "username": "cooljmessy",
+                "name": "Peter Messy",
+                "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/1/1a/MR_MESSY_4A.jpg/revision/latest/scale-to-width-down/250?cb=20170730171002"
+              }
+            ]
+          },
+          "200_without_users": { "users": [] }
+        }
       }
     }
   },
-  "DELETE /api/comments/:comment_id": {
-    "description": "Allows users to delete comments by a comment_id"
+  "GlobalErrors": {
+    "400_psql_err_code_22PO2": {
+      "status": 400,
+      "message": "Invalid input."
+    },
+    "404_path_not_found": { "status": 404, "message": "Path not found." },
+    "404_psql_err_23503_author": {
+      "status": 404,
+      "message": "Username not found."
+    },
+    "404_psql_code_23503_article_id": {
+      "status": 404,
+      "message": "Article not found."
+    },
+    "500_internal_server_error": {
+      "status": 500,
+      "message": "Internal server error"
+    }
   }
 }
