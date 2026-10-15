@@ -4,19 +4,21 @@
     "cors": "^2.8.6",
     "dotenv": "^18.0.5",
     "express": "^5.2.1",
-    "nodemon": "^3.1.14",
     "pg": "^8.23.1"
   },
   "devDependencies": {
     "cross-env": "^10.1.0",
     "jest": "^30.5.2",
     "jest-sorted": "^1.0.15",
+    "nodemon": "^3.1.14",
     "pg-format": "^1.0.4",
     "supertest": "^7.3.1"
   },
   "scripts": {
     "setup-dbs": "psql -f db/setup.sql",
     "seed": "node ./db/seeds/run-seed.js",
-    "test": "cross-env NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand"
+    "test": "cross-env NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
+    "dev": "nodemon server.js",
+    "start": "node server.js"
   }
 }
