@@ -4,7 +4,7 @@ A PostgreSQL API that alongside a front-end project will be used to create a min
 
 ## Background
 
-This project is a recreation of the first API I created whilst on my Northcoders bootcamp. It was created during the back-end portion of the course. I am revisiting the project as I was made redundant from a role where I had worked mostly front end. I'd like to see how much I have improved and get some practice in.
+This project is a recreation of the first API I created whilst on my Northcoders bootcamp (`https://github.com/BerniHarris/be-nc-news`). It was created during the back-end portion of the course. I am revisiting the project as I was made redundant from a role where I had worked mostly front end. I'd like to see how much I have improved and get some practice in.
 
 The project is created using the MVC (model, view, controller) design method.
 
@@ -41,6 +41,7 @@ You are then able to run locally by using the command `node server.js` and visit
 Jest and Supertest are used for testing. In order to run tests, use the command `npm test`. This will run by default using the test environment.
 
 To testing in watch mode, use the command `npm test -- --watch`.
+
 To view test coverage, use the command `npm test -- --coverage`.
 
 You can also run with nodemon with command `npm run dev`
@@ -59,3 +60,12 @@ Details can be seen in `endpoints.json`, however as a brief overview, the endpoi
 - **PATCH /api/articles/:article_id** - Allows users to upvote or downvote an article and responds with the updated article object
 - **GET /api/users**- Serves an array of all users
 - **DELETE /api/comments/:comment_id** Allows users to delete comments by a comment_id
+
+## Hosted API
+
+Base URL:
+`https://be-nc-news2.onrender.com/api`
+
+Example:
+`https://be-nc-news2.onrender.com/api/articles/1/comments`
+`
