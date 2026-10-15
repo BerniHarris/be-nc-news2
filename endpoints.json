@@ -112,5 +112,8 @@
         "comment_count": 8
       }
     }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "allows users to upvote or downvote an article and responds with the updated article object"
   }
 }

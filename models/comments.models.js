@@ -24,3 +24,26 @@ export const addCommentToArticle = async (articleId, author, body) => {
   );
   return rows[0];
 };
+
+export const fetchComment = async (comment_id) => {
+  const { rows } = await db.query(
+    `SELECT *
+    FROM comments
+    WHERE comment_id = $1;`,
+    [comment_id],
+  );
+  if (!rows[0]) {
+    return Promise.reject({ status: 404, message: "Comment not found" });
+  }
+
+  return rows[0];
+};
+
+export const deleteComment = async (comment_id) => {
+  const { rows } = await db.query(
+    `DELETE FROM comments WHERE comment_id = $1 RETURNING *;`,
+    [comment_id],
+  );
+
+  return rows[0];
+};

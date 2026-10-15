@@ -424,4 +424,33 @@ describe("be nc news2", () => {
       expect(response.body.message).toBe("Invalid article id");
     });
   });
+
+  describe("DELETE /api/comments/:comment_id", () => {
+    test("204 - returns correct error code when comment_id is valid", async () => {
+      await request(app).delete("/api/comments/1").expect(204);
+    });
+    test("204 - correctly removes comment when comment_id is valid", async () => {
+      return request(app)
+        .delete("/api/comments/1")
+        .expect(204)
+        .then(async () => {
+          const { body } = await request(app)
+            .delete("/api/comments/1")
+            .expect(404);
+          expect(body.message).toBe("Comment not found");
+        });
+    });
+    test("404 - returns correct error message when a comment id does not exist", async () => {
+      const { body } = await request(app)
+        .delete("/api/comments/111")
+        .expect(404);
+      expect(body.message).toBe("Comment not found");
+    });
+    test("404 - returns correct error message when a comment id does not exist", async () => {
+      const { body } = await request(app)
+        .delete("/api/comments/wrongwrongwrong")
+        .expect(400);
+      expect(body.message).toBe("Invalid commment id");
+    });
+  });
 });
