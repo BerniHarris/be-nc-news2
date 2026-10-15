@@ -55,3 +55,4 @@ Details can be seen in `endpoints.json`, however as a brief overview, the endpoi
 - **POST /api/articles/:article_id/comments** - Create a comment for a specific article_id and return the created comment object
 - **PATCH /api/articles/:article_id** - Allows users to upvote or downvote an article and responds with the updated article object
 - **GET /api/Users**- Serves an array of all users
+- **DELETE /api/comments/:comment_id** Allows users to delete comments by a comment_id
