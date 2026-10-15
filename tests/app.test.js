@@ -34,11 +34,11 @@ describe("be nc news2", () => {
       expect(topics).toBeDefined();
       expect(topics).toEqual(expect.any(Array));
     });
-    test("Returns the correct number of topics", async () => {
+    test("200: Returns the correct number of topics", async () => {
       const { body } = await request(app).get("/api/topics").expect(200);
       expect(body.topics).toHaveLength(3);
     });
-    test("Each topic returned includes the correct keys", async () => {
+    test("200: Each topic returned includes the correct keys", async () => {
       const { body } = await request(app).get("/api/topics").expect(200);
       expect(body.topics).toEqual(
         expect.arrayContaining([
@@ -49,7 +49,7 @@ describe("be nc news2", () => {
         ]),
       );
     });
-    test("Returns the correct data", async () => {
+    test("200: Returns the correct data", async () => {
       const { body } = await request(app).get("/api/topics").expect(200);
       expect(body.topics).toEqual([
         { description: "The man, the Mitch, the legend", slug: "mitch" },
@@ -66,11 +66,11 @@ describe("be nc news2", () => {
       expect(articles).toBeDefined();
       expect(articles).toEqual(expect.any(Array));
     });
-    test("Returns the correct number of articles", async () => {
+    test("200: Returns the correct number of articles", async () => {
       const { body } = await request(app).get("/api/articles").expect(200);
       expect(body.articles).toHaveLength(13);
     });
-    test("Each article includes: author, title, article_id, topic, created_at, votes, article_img_url, comment_count", async () => {
+    test("200: Each article includes: author, title, article_id, topic, created_at, votes, article_img_url, comment_count", async () => {
       const { body } = await request(app).get("/api/articles").expect(200);
       expect(body.articles).toEqual(
         expect.arrayContaining([
@@ -87,7 +87,7 @@ describe("be nc news2", () => {
         ]),
       );
     });
-    test("Returned articles exclude article body", async () => {
+    test("200: Returned articles exclude article body", async () => {
       const { body } = await request(app).get("/api/articles").expect(200);
       expect(body.articles[0].body).not.toBeDefined();
       expect(body.articles).toEqual(
@@ -99,7 +99,7 @@ describe("be nc news2", () => {
       );
     });
 
-    test("Returned articles are sorted in DESC order of the articles created_at date field by default ", async () => {
+    test("200: Returned articles are sorted in DESC order of the articles created_at date field by default ", async () => {
       const { body } = await request(app).get("/api/articles").expect(200);
       expect(body.articles).toBeSortedBy("created_at", { descending: true });
     });
@@ -123,7 +123,7 @@ describe("be nc news2", () => {
         ["article_img_url", "desc"],
         ["comment_count", "desc"],
       ])(
-        "Correctly sorts articles by %s in %s order when requested",
+        "200: Correctly sorts articles by %s in %s order when requested",
         async (sort_by, order) => {
           const { body } = await request(app)
             .get(`/api/articles?sort_by=${sort_by}&&order=${order}`)
@@ -199,11 +199,11 @@ describe("be nc news2", () => {
       expect(users).toBeDefined();
       expect(users).toEqual(expect.any(Array));
     });
-    test("Returns the correct number of users", async () => {
+    test("200: Returns the correct number of users", async () => {
       const { body } = await request(app).get("/api/users").expect(200);
       expect(body.users).toHaveLength(4);
     });
-    test("Each user returned includes the correct keys", async () => {
+    test("200: Each user returned includes the correct keys", async () => {
       const { body } = await request(app).get("/api/users").expect(200);
       expect(body.users).toEqual(
         expect.arrayContaining([
@@ -215,7 +215,7 @@ describe("be nc news2", () => {
         ]),
       );
     });
-    test("Returns the correct data", async () => {
+    test("200: Returns the correct data", async () => {
       const { body } = await request(app).get("/api/users").expect(200);
       expect(body.users).toEqual([
         {
@@ -305,7 +305,7 @@ describe("be nc news2", () => {
   });
 
   describe("POST /api/articles/:article_id/comments", () => {
-    test("status 201: returns correct article with updated votes", async () => {
+    test("201: returns correct article with updated votes", async () => {
       const userComment = {
         username: "butter_bridge",
         body: "Hello! Hope you're having a good day",
@@ -375,6 +375,18 @@ describe("be nc news2", () => {
 
         .expect(404);
       expect(response.body.message).toBe("Article not found.");
+    });
+    test("404: responds with the correct error message when passed an invalid username", async () => {
+      const userComment = {
+        username: "otis",
+        body: "Hello! Hope you're having a good day",
+      };
+      const response = await request(app)
+        .post("/api/articles/1/comments")
+        .send(userComment)
+
+        .expect(404);
+      expect(response.body.message).toBe("Username not found.");
     });
   });
 

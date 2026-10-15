@@ -22,7 +22,7 @@ export const customError = (err, req, res, next) => {
 };
 
 export const error500 = (err, req, res, next) => {
-  return res.status(500).send({ message: "Internal Server Error" });
+  return res.status(500).send({ message: "Internal server error" });
 };
 
 export const error404 = (req, res) => {

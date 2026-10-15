@@ -56,6 +56,11 @@ describe("Error Handling Middleware", () => {
       expect(res.send).toHaveBeenCalledWith({ message: "Article not found." });
       expect(next).not.toHaveBeenCalled();
     });
+    test("calls next for unhandled postgres errors", () => {
+      const err = { code: "99999" };
+      psqlError(err, req, res, next);
+      expect(next).toHaveBeenCalledWith(err);
+    });
   });
 
   describe("customError", () => {
@@ -77,12 +82,22 @@ describe("Error Handling Middleware", () => {
       expect(next).toHaveBeenCalled();
     });
     test("calls next if no error status included", () => {
-      const err = { status: 404 };
+      const err = { message: "oops" };
 
       customError(err, req, res, next);
       expect(res.status).not.toHaveBeenCalled();
       expect(res.send).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalled();
+    });
+    test("ignores extra fields and still sends correct error", () => {
+      const err = { status: 400, message: "Bad request", foo: "bar" };
+      customError(err, req, res, next);
+      expect(res.send).toHaveBeenCalledWith({ message: "Bad request" });
+    });
+    test("does not call next when both status and message exist", () => {
+      const err = { status: 400, message: "Bad request" };
+      customError(err, req, res, next);
+      expect(next).not.toHaveBeenCalled();
     });
   });
 
@@ -92,6 +107,7 @@ describe("Error Handling Middleware", () => {
 
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.send).toHaveBeenCalledWith({ message: "Path not found." });
+      expect(next).not.toHaveBeenCalled();
     });
   });
 
@@ -103,7 +119,7 @@ describe("Error Handling Middleware", () => {
 
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.send).toHaveBeenCalledWith({
-        message: "Internal Server Error",
+        message: "Internal server error",
       });
     });
   });
