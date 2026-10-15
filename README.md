@@ -43,6 +43,8 @@ Jest and Supertest are used for testing. In order to run tests, use the command 
 To testing in watch mode, use the command `npm test -- --watch`.
 To view test coverage, use the command `npm test -- --coverage`.
 
+You can also run with nodemon with command `npm run dev`
+
 ## Endpoints
 
 Details can be seen in `endpoints.json`, however as a brief overview, the endpoints included are:

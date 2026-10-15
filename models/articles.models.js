@@ -1,10 +1,14 @@
 import db from "../db/connection.js";
 
-export const fetchArticles = async (sort_by, order, topic) => {
+export const fetchArticles = async (
+  sort_by = "created_at",
+  order = "desc",
+  topic,
+) => {
   const articleColumns =
     "articles.author, articles.title, articles.topic, articles.created_at, articles.votes, articles.article_id, articles.article_img_url,";
 
-  const topicFilter = !topic ? "" : `WHERE topic = '${topic}'`;
+  const topicFilter = topic ? `WHERE topic = '${topic}'` : "";
 
   const sortBy =
     sort_by === "comment_count" ? "comment_count" : `articles.${sort_by}`;
