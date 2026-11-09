@@ -35,6 +35,12 @@ const userData = [
     avatar_url:
       "https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141",
   },
+  {
+    username: "guestUser1",
+    name: "anonymous guest",
+    avatar_url:
+      "https://nc-pigeonpost.netlify.app/static/media/profileicon.03c7faf867164ed41afd.png",
+  },
 ];
 
 export default userData;

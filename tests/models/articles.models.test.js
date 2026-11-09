@@ -16,7 +16,6 @@ describe("fetchArticleById model", () => {
     const article = await fetchArticleById(1);
     expect(article.article_id).toBe(1);
     expect(article.comment_count).toBe(11);
-    console.log(article);
     expect(article).toEqual(
       expect.objectContaining({
         author: expect.any(String),

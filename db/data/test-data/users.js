@@ -21,6 +21,12 @@ const userData = [
     avatar_url:
       "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
   },
+  {
+    username: "guestUser1",
+    name: "anonymous guest",
+    avatar_url:
+      "https://nc-pigeonpost.netlify.app/static/media/profileicon.03c7faf867164ed41afd.png",
+  },
 ];
 
 export default userData;
