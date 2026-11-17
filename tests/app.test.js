@@ -201,7 +201,7 @@ describe("be nc news2", () => {
     });
     test("200: Returns the correct number of users", async () => {
       const { body } = await request(app).get("/api/users").expect(200);
-      expect(body.users).toHaveLength(4);
+      expect(body.users).toHaveLength(5);
     });
     test("200: Each user returned includes the correct keys", async () => {
       const { body } = await request(app).get("/api/users").expect(200);
@@ -241,6 +241,12 @@ describe("be nc news2", () => {
           name: "do_nothing",
           avatar_url:
             "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+        },
+        {
+          username: "guestUser1",
+          name: "anonymous guest",
+          avatar_url:
+            "https://nc-pigeonpost.netlify.app/static/media/profileicon.03c7faf867164ed41afd.png",
         },
       ]);
     });
